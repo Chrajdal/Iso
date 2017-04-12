@@ -67,7 +67,7 @@ void Game::ComposeFrame()
 		{
 			if (i + offY > 0 && i + offY < g_tile_map.size() - 1 && j + offX > 0 && j + offX < g_tile_map.size() - 1)
 			{
-				gfx.draw_tile(i + 0, j + 0, g_tile_map[i + offY][j + offX]);
+				gfx.draw_tile(i + 0, j + 0, g_tile_map[i + (int)offY][j + (int)offX]);
 			}
 		}
 	}

@@ -87,9 +87,6 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX),CS_CLASSDC,MsgProc,0,0,
 					  GetModuleHandle(NULL),NULL,NULL,NULL,NULL,
 					  L"Iso Window",NULL };
-	//wc.hIconSm = (HICON)LoadImage( hInst,MAKEINTRESOURCE( IDI_APPICON16 ),IMAGE_ICON,16,16,0 );
-	//wc.hIcon   = (HICON)LoadImage( hInst,MAKEINTRESOURCE( IDI_APPICON32 ),IMAGE_ICON,32,32,0 );
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	RegisterClassEx(&wc);
 
 	RECT wr;
