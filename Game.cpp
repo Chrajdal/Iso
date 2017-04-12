@@ -19,12 +19,12 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 	kbd( kServer ),
 	mouse( mServer )
 {
-	srand(time(0));
+	srand((unsigned)time(0));
 
-	for (int i = 0; i < g_size; ++i)
+	for (unsigned int i = 0; i < g_size; ++i)
 	{
 		vector<D3DCOLOR> tmp;
-		for (int j = 0; j < g_size; ++j)
+		for (unsigned int j = 0; j < g_size; ++j)
 		{
 			tmp.push_back(D3DCOLOR_XRGB(rand() % 55, rand() % 200 + 55, rand() % 55));
 		}
@@ -60,8 +60,6 @@ void Game::ComposeFrame()
 		exit(0);
 
 	handle_user();
-
-	
 
 	for (unsigned int i = 0; i < g_tile_map.size(); ++i)
 	{

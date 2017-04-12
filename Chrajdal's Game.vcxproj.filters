@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\Framework">
       <UniqueIdentifier>{93e508de-cf6d-4d34-a110-f767c918b5c9}</UniqueIdentifier>
     </Filter>
@@ -40,9 +36,6 @@
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
@@ -80,10 +73,5 @@
     <ClCompile Include="Windows.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="ChiliDirectXFramework.res">
-      <Filter>Resource Files</Filter>
-    </Resource>
   </ItemGroup>
 </Project>

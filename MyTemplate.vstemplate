@@ -1,13 +1,13 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>Chili DirectX Framework 2014.03.31</Name>
-    <Description>Now with 50% less linker errors!</Description>
+    <Name>Chrajdal's Game</Name>
+    <Description>Isometric madness</Description>
     <ProjectType>VC</ProjectType>
     <ProjectSubType>
     </ProjectSubType>
     <SortOrder>1000</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>Chili DirectX Framework 2014.03.31</DefaultName>
+    <DefaultName>Chrajdal's Game</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
@@ -15,8 +15,8 @@
     <PreviewImage>__PreviewImage.png</PreviewImage>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="Chili DirectX Framework 2014.02.16.vcxproj" File="Chili DirectX Framework 2014.02.16.vcxproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$.vcxproj.filters">Chili DirectX Framework 2014.02.16.vcxproj.filters</ProjectItem>
+    <Project TargetFileName="Chrajdal's Game.vcxproj" File="Chrajdal's Game" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$.vcxproj.filters">Chrajdal's Game.vcxproj.filters</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Game.cpp">Game.cpp</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="D3DGraphics.cpp">D3DGraphics.cpp</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Keyboard.cpp">Keyboard.cpp</ProjectItem>
@@ -36,7 +36,6 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="Sound.h">Sound.h</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Timer.h">Timer.h</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Vec2.h">Vec2.h</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="ChiliDirectXFramework.res">ChiliDirectXFramework.res</ProjectItem>
     </Project>
   </TemplateContent>
 </VSTemplate>
