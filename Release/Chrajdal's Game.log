@@ -1,0 +1,11 @@
+﻿  D3DGraphics.cpp
+  Keyboard.cpp
+  Mouse.cpp
+  Sound.cpp
+  Timer.cpp
+  Windows.cpp
+  Game.cpp
+  Generating code
+  All 389 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Chrajdal's Game.vcxproj -> C:\Users\janch\Desktop\C++stuff\ISO\Iso\Release\Isometric.exe
