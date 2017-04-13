@@ -6,11 +6,6 @@
 
 using namespace std;
 
-/*
-	Big comment coming up
-*/
-
-
 vector<vector<D3DCOLOR>> g_tile_map;
 
 unsigned int g_size = 20;

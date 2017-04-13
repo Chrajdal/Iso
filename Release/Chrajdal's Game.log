@@ -1,11 +1,8 @@
 ﻿  D3DGraphics.cpp
-  Keyboard.cpp
-  Mouse.cpp
-  Sound.cpp
-  Timer.cpp
   Windows.cpp
-  Game.cpp
   Generating code
-  All 389 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 389 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Chrajdal's Game.vcxproj -> C:\Users\janch\Desktop\C++stuff\ISO\Iso\Release\Isometric.exe

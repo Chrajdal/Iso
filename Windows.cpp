@@ -99,7 +99,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, wr.left, wr.top, wr.right - wr.left, wr.bottom - wr.top,
 		NULL, NULL, wc.hInstance, NULL);
 
-	ShowWindow(hWnd, SW_MAXIMIZE ); //SW_SHOWDEFAULT);
+	ShowWindow(hWnd, /*SW_MAXIMIZE );*/ SW_SHOWDEFAULT);
 	UpdateWindow(hWnd);
 
 	Game theGame(hWnd, kServ, mServ);

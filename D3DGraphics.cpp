@@ -192,8 +192,8 @@ void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR c)
 {
 	int tile_height = 50; // Beware - must be even!
 	int tile_width = tile_height * 2;
-	int x = (tile_x - tile_y) * tile_width / 2;// +(SCREENWIDTH / 2);
-	int y = (tile_x + tile_y) * tile_height / 2;// +(SCREENHEIGHT / 2);
+	int x = (tile_x - tile_y) * tile_width / 2 + (SCREENWIDTH / 2);
+	int y = (tile_x + tile_y) * tile_height / 2 + (SCREENHEIGHT / 2);
 
 	if (y < 1 || y >= SCREENHEIGHT)
 		return;
