@@ -15,7 +15,7 @@ public:
 	void Go();
 private:
 	void ComposeFrame(void);
-	void handle_user(void);
+	void handle_user();
 
 private:
 	D3DGraphics gfx;
