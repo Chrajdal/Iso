@@ -54,27 +54,40 @@ void Game::UpdateModel()
 {
 }
 
+// yay using algebra outside of school!
+void tile_to_screen_position(int tile_x, int tile_y, int & screen_x, int & screen_y, int tile_w, int tile_h, int screen_w, int screen_h)
+{
+	screen_x = (tile_x - tile_y) * tile_w / 2;
+	screen_y = (tile_x + tile_y) * tile_h / 2;
+}
+void screen_to_tile_position(int & tile_x, int & tile_y, int screen_x, int screen_y, int tile_w, int tile_h, int screen_w, int screen_h)
+{
+	tile_x = (screen_x / (tile_w / 2) + screen_y / (tile_h / 2)) / 2;
+	tile_y = (screen_y / (tile_h / 2) - (screen_x / (tile_w / 2))) / 2;
+}
+
 void Game::ComposeFrame()
 {
 	if (kbd.KeyIsPressed(VK_ESCAPE))
 		exit(0);
 
-	for (unsigned int i = 0; i < g_tile_map.size(); ++i)
+	int start_tile_x, start_tile_y, end_tile_x, end_tile_y;
+	screen_to_tile_position(start_tile_x, start_tile_y, 0, 0, g_tile_width, g_tile_height, gfx.SCREENWIDTH, gfx.SCREENHEIGHT);
+	screen_to_tile_position(end_tile_x, end_tile_y, gfx.SCREENWIDTH - 1, gfx.SCREENHEIGHT - 1, g_tile_width, g_tile_height, gfx.SCREENWIDTH, gfx.SCREENHEIGHT);
+
+	for (unsigned int i = start_tile_y; i < end_tile_y; ++i)
 	{
-		for (unsigned int j = 0; j < g_tile_map.size(); ++j)
+		for (unsigned int j = start_tile_x; j < end_tile_x; ++j)
 		{
 			if (i + offY > 0 && i + offY < g_tile_map.size() - 1 && j + offX > 0 && j + offX < g_tile_map.size() - 1)
 			{
-				gfx.draw_tile(i - 15, j - 15, g_tile_height, g_tile_width, g_tile_map[i + (int)offY][j + (int)offX]);
+				gfx.draw_tile(i, j, g_tile_height, g_tile_width, g_tile_map[j + offX][i + offY]);
 			}
 		}
 	}
 
 	handle_user();
-
 	gfx.draw_rect(gfx.SCREENWIDTH / 2 - 10, gfx.SCREENHEIGHT / 2 - 25, 20, 30, BLUE);
-	//gfx.DrawLine(0, 0, gfx.SCREENWIDTH - 1, gfx.SCREENHEIGHT - 1, WHITE);
-	//gfx.DrawLine(gfx.SCREENWIDTH - 1, 0, 0, gfx.SCREENHEIGHT - 1, WHITE);
 }
 
 void Game::handle_user()
