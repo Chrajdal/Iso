@@ -15,7 +15,6 @@ unsigned int g_tile_width = g_tile_height * 2;
 
 int a1, a2, b1, b2, c1, c2, d1, d2;
 
-
 // yay using algebra outside of school!
 void tile_to_screen_position(int tile_x, int tile_y, int & screen_x, int & screen_y, int tile_w, int tile_h)
 {
@@ -24,8 +23,8 @@ void tile_to_screen_position(int tile_x, int tile_y, int & screen_x, int & scree
 }
 void screen_to_tile_position(int & tile_x, int & tile_y, int screen_x, int screen_y, int tile_w, int tile_h)
 {
-	tile_x = screen_x / tile_w + screen_y / tile_h;
-	tile_y = screen_y / tile_h - screen_x / tile_w;
+	tile_x = double(screen_x) / tile_w + double(screen_y) / tile_h;
+	tile_y = double(screen_y) / tile_h - double(screen_x) / tile_w;
 }
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
@@ -94,6 +93,18 @@ void Game::ComposeFrame()
 	gfx.draw_rect(g_tile_width / 2, gfx.SCREENHEIGHT - g_tile_height / 2, gfx.SCREENWIDTH - g_tile_width, g_tile_height / 2, BLACK);
 	gfx.draw_rect(g_tile_width / 2, 0, gfx.SCREENWIDTH - g_tile_width, g_tile_height / 2, BLACK);
 
+	if (mouse.LeftIsPressed())
+	{
+		int x = mouse.GetMouseX();
+		int y = mouse.GetMouseY();
+
+		int mouse_grid_x = floor((y / g_tile_height) + (x / g_tile_width));
+		int mouse_grid_y = floor((-x / g_tile_width) + (y / g_tile_height));
+		
+		//if (tile_x + floor(offX) >= 0 && tile_x + floor(offX) < g_tile_map.size() && tile_y + floor(offY) >= 0 && tile_y + floor(offY) < g_tile_map.size())
+		g_tile_map[mouse_grid_x + offX][mouse_grid_y + offY] = RED;
+	}
+	
 	handle_user();
 }
 
