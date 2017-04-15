@@ -1,8 +1,4 @@
 ﻿  D3DGraphics.cpp
   Game.cpp
-  Keyboard.cpp
-  Mouse.cpp
-  Sound.cpp
-  Timer.cpp
-  Windows.cpp
-  Chrajdal's Game.vcxproj -> C:\Users\janch\Desktop\C++stuff\ISO\Iso\Debug\Isometric.exe
+c:\users\janch\desktop\iso\game.cpp(88): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+  Chrajdal's Game.vcxproj -> C:\Users\janch\Desktop\ISO\Debug\Isometric.exe
