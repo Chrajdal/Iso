@@ -18,7 +18,7 @@ public:
 	void DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c );
 	void DrawCircle( int centerX,int centerY,int radius,D3DCOLOR c );
 	void DrawDisc(int centerX, int centerY, int radius, D3DCOLOR color);
-	void draw_tile(int x, int y, D3DCOLOR c);
+	//void draw_tile(int x, int y, D3DCOLOR c);
 	void draw_tile(int tile_x, int tile_y, int tile_height, int tile_width, D3DCOLOR c);
 	void draw_rect(int x, int y, int w, int h, D3DCOLOR c);
 	

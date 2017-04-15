@@ -188,12 +188,13 @@ void D3DGraphics::DrawDisc(int centerX, int centerY, int radius, D3DCOLOR color)
 	}
 }
 
+/*
 void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR c)
 {
 	int tile_height = 45; // Beware - must be even!
 	int tile_width = tile_height * 2;
-	int x = (tile_x - tile_y) * tile_width / 2 + (SCREENWIDTH / 2);
-	int y = (tile_x + tile_y) * tile_height / 2 + (SCREENHEIGHT / 2);
+	int x = (tile_x - tile_y) * tile_width / 2;// + (SCREENWIDTH / 2);
+	int y = (tile_x + tile_y) * tile_height / 2;// + (SCREENHEIGHT / 2);
 
 	for (int i = 0; i < tile_height / 2; ++i)
 	{
@@ -210,53 +211,46 @@ void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR c)
 			
 	}
 
-	/*
-	Vec2 top(x, y - tile_height / 2);
-	Vec2 right(x + tile_width / 2, y);
-	Vec2 left(x - tile_width / 2, y);
-	Vec2 down(x, y + tile_height / 2);
 
-	DrawLine(top, right, BLACK);
-	DrawLine(top, left, BLACK);
-	DrawLine(down, right, BLACK);
-	DrawLine(down, left, BLACK);
-	*/
+	//Vec2 top(x, y - tile_height / 2);
+	//Vec2 right(x + tile_width / 2, y);
+	//Vec2 left(x - tile_width / 2, y);
+	//Vec2 down(x, y + tile_height / 2);
+	//DrawLine(top, right, BLACK);
+	//DrawLine(top, left, BLACK);
+	//DrawLine(down, right, BLACK);
+	//DrawLine(down, left, BLACK);
 }
+*/
 
 void D3DGraphics::draw_tile(int tile_x, int tile_y, int tile_height, int tile_width, D3DCOLOR c)
 {
-	assert(tile_height * 2 == tile_width);
-	//int tile_height = 45; // Beware - must be even!
-	//int tile_width = tile_height * 2;
-	int x = (tile_x - tile_y) * tile_width / 2 + (SCREENWIDTH / 2);
-	int y = (tile_x + tile_y) * tile_height / 2 + (SCREENHEIGHT / 2);
+	int x = (tile_x - tile_y) * tile_width / 2;
+	int y = (tile_x + tile_y) * tile_height / 2;
+	
+	//if (x - tile_width / 2 < 0 || x + tile_width / 2 >= SCREENWIDTH)
+	//	return;
+	//if (y - tile_height / 2 < 0 || y + tile_height / 2 >= SCREENHEIGHT)
+	//	return;
+
+	if (x - 1 < 0 || x + 1 >= SCREENWIDTH)
+		return;
+	if (y - 1 < 0 || y + 1 >= SCREENHEIGHT)
+		return;
 
 	for (int i = 0; i < tile_height / 2; ++i)
 	{
 		for (int j = x - 2 * i; j < x + 2 * i; ++j)
 		{
-			if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
+			//if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
 				PutPixel(j, y - tile_height / 2 + i, c);
 		}
 		for (int j = x - (tile_height - 2 * i); j < x + (tile_height - 2 * i); ++j)
 		{
-			if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
+			//if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
 				PutPixel(j, y + i, c);
 		}
-
 	}
-
-	/*
-	Vec2 top(x, y - tile_height / 2);
-	Vec2 right(x + tile_width / 2, y);
-	Vec2 left(x - tile_width / 2, y);
-	Vec2 down(x, y + tile_height / 2);
-
-	DrawLine(top, right, BLACK);
-	DrawLine(top, left, BLACK);
-	DrawLine(down, right, BLACK);
-	DrawLine(down, left, BLACK);
-	*/
 }
 
 void D3DGraphics::draw_rect(int x, int y, int w, int h, D3DCOLOR c)

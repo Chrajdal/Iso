@@ -10,8 +10,23 @@ vector<vector<D3DCOLOR>> g_tile_map;
 
 unsigned int g_size = 100;
 double offX = g_size / 2, offY = g_size / 2;
-unsigned int g_tile_height = 64;
+unsigned int g_tile_height = 50;
 unsigned int g_tile_width = g_tile_height * 2;
+
+int a1, a2, b1, b2, c1, c2, d1, d2;
+
+
+// yay using algebra outside of school!
+void tile_to_screen_position(int tile_x, int tile_y, int & screen_x, int & screen_y, int tile_w, int tile_h)
+{
+	screen_x = (tile_x - tile_y) * tile_w / 2;
+	screen_y = (tile_x + tile_y) * tile_h / 2;
+}
+void screen_to_tile_position(int & tile_x, int & tile_y, int screen_x, int screen_y, int tile_w, int tile_h)
+{
+	tile_x = screen_x / tile_w + screen_y / tile_h;
+	tile_y = screen_y / tile_h - screen_x / tile_w;
+}
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 :	gfx( hWnd ),
@@ -35,7 +50,10 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 
 	g_tile_map[g_size / 2][g_size / 2] = RED;
 
-
+	screen_to_tile_position(a1, a2, 0, 0, g_tile_width, g_tile_height);
+	screen_to_tile_position(b1, b2, gfx.SCREENWIDTH, 0, g_tile_width, g_tile_height);
+	screen_to_tile_position(c1, c2, 0, gfx.SCREENHEIGHT, g_tile_width, g_tile_height);
+	screen_to_tile_position(d1, d2, gfx.SCREENWIDTH, gfx.SCREENHEIGHT, g_tile_width, g_tile_height);
 }
 
 Game::~Game()
@@ -54,54 +72,43 @@ void Game::UpdateModel()
 {
 }
 
-// yay using algebra outside of school!
-void tile_to_screen_position(int tile_x, int tile_y, int & screen_x, int & screen_y, int tile_w, int tile_h, int screen_w, int screen_h)
-{
-	screen_x = (tile_x - tile_y) * tile_w / 2;
-	screen_y = (tile_x + tile_y) * tile_h / 2;
-}
-void screen_to_tile_position(int & tile_x, int & tile_y, int screen_x, int screen_y, int tile_w, int tile_h, int screen_w, int screen_h)
-{
-	tile_x = (screen_x / (tile_w / 2) + screen_y / (tile_h / 2)) / 2;
-	tile_y = (screen_y / (tile_h / 2) - (screen_x / (tile_w / 2))) / 2;
-}
 
 void Game::ComposeFrame()
 {
 	if (kbd.KeyIsPressed(VK_ESCAPE))
 		exit(0);
 
-	int start_tile_x, start_tile_y, end_tile_x, end_tile_y;
-	screen_to_tile_position(start_tile_x, start_tile_y, 0, 0, g_tile_width, g_tile_height, gfx.SCREENWIDTH, gfx.SCREENHEIGHT);
-	screen_to_tile_position(end_tile_x, end_tile_y, gfx.SCREENWIDTH - 1, gfx.SCREENHEIGHT - 1, g_tile_width, g_tile_height, gfx.SCREENWIDTH, gfx.SCREENHEIGHT);
-
-	for (unsigned int i = start_tile_y; i < end_tile_y; ++i)
-	{
-		for (unsigned int j = start_tile_x; j < end_tile_x; ++j)
-		{
-			if (i + offY > 0 && i + offY < g_tile_map.size() - 1 && j + offX > 0 && j + offX < g_tile_map.size() - 1)
-			{
+	int startx = a1;
+	int starty = b2;
+	int endx = d1;
+	int endy = c2;
+	for (int i = startx; i <= endx; ++i)
+		for (int j = starty; j <= endy; ++j)
+			if (i + offY >= 0 && i + offY < g_tile_map.size() && j + offX >= 0 && j + offX < g_tile_map.size())
 				gfx.draw_tile(i, j, g_tile_height, g_tile_width, g_tile_map[j + offX][i + offY]);
-			}
-		}
-	}
+
+	gfx.draw_rect(gfx.SCREENWIDTH / 2 - 10, gfx.SCREENHEIGHT / 2 - 25, 20, 30, BLUE);
+
+	gfx.draw_rect(0, 0, g_tile_width / 2, gfx.SCREENHEIGHT, BLACK);
+	gfx.draw_rect(gfx.SCREENWIDTH - g_tile_width / 2, 0, g_tile_width / 2, gfx.SCREENHEIGHT, BLACK);
+	gfx.draw_rect(g_tile_width / 2, gfx.SCREENHEIGHT - g_tile_height / 2, gfx.SCREENWIDTH - g_tile_width, g_tile_height / 2, BLACK);
+	gfx.draw_rect(g_tile_width / 2, 0, gfx.SCREENWIDTH - g_tile_width, g_tile_height / 2, BLACK);
 
 	handle_user();
-	gfx.draw_rect(gfx.SCREENWIDTH / 2 - 10, gfx.SCREENHEIGHT / 2 - 25, 20, 30, BLUE);
 }
 
 void Game::handle_user()
 {
 	double speed = 0.25;
-	if ((kbd.KeyIsPressed(VK_UP) && kbd.KeyIsPressed(VK_DOWN)) ||
-		(kbd.KeyIsPressed(VK_UP) && kbd.KeyIsPressed(VK_LEFT)) ||
-		(kbd.KeyIsPressed(VK_UP) && kbd.KeyIsPressed(VK_RIGHT)) ||
-
-		(kbd.KeyIsPressed(VK_DOWN) && kbd.KeyIsPressed(VK_LEFT)) ||
-		(kbd.KeyIsPressed(VK_DOWN) && kbd.KeyIsPressed(VK_RIGHT)) ||
-
-		(kbd.KeyIsPressed(VK_LEFT) && kbd.KeyIsPressed(VK_RIGHT)))
-		return;
+	//if ((kbd.KeyIsPressed(VK_UP) && kbd.KeyIsPressed(VK_DOWN)) ||
+	//	(kbd.KeyIsPressed(VK_UP) && kbd.KeyIsPressed(VK_LEFT)) ||
+	//	(kbd.KeyIsPressed(VK_UP) && kbd.KeyIsPressed(VK_RIGHT)) ||
+	//
+	//	(kbd.KeyIsPressed(VK_DOWN) && kbd.KeyIsPressed(VK_LEFT)) ||
+	//	(kbd.KeyIsPressed(VK_DOWN) && kbd.KeyIsPressed(VK_RIGHT)) ||
+	//
+	//	(kbd.KeyIsPressed(VK_LEFT) && kbd.KeyIsPressed(VK_RIGHT)))
+	//	return;
 
 	if (kbd.KeyIsPressed(VK_DOWN))
 	{
