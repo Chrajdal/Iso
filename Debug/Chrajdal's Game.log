@@ -1,4 +1,2 @@
 ﻿  D3DGraphics.cpp
-  Game.cpp
-c:\users\janch\desktop\iso\game.cpp(88): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
   Chrajdal's Game.vcxproj -> C:\Users\janch\Desktop\ISO\Debug\Isometric.exe
