@@ -1,4 +1,31 @@
-﻿  D3DGraphics.cpp
-  Game.cpp
-c:\users\janch\desktop\iso\game.cpp(88): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-  Chrajdal's Game.vcxproj -> C:\Users\janch\Desktop\ISO\Debug\Isometric.exe
+﻿Build started 16.04.2017 11:00:08.
+     1>Project "C:\Users\Eliška\Desktop\Honzík\ISO\Chrajdal's Game.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt D3DGraphics.cpp Game.cpp Keyboard.cpp Mouse.cpp Sound.cpp Timer.cpp Windows.cpp
+         D3DGraphics.cpp
+         Game.cpp
+         Keyboard.cpp
+         Mouse.cpp
+         Sound.cpp
+         Timer.cpp
+     1>c:\users\eliška\desktop\honzík\iso\game.cpp(26): warning C4244: '=': conversion from 'double' to 'int', possible loss of data (compiling source file Game.cpp)
+     1>c:\users\eliška\desktop\honzík\iso\game.cpp(27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data (compiling source file Game.cpp)
+     1>c:\users\eliška\desktop\honzík\iso\game.cpp(87): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data (compiling source file Game.cpp)
+     1>c:\users\eliška\desktop\honzík\iso\game.cpp(101): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file Game.cpp)
+     1>c:\users\eliška\desktop\honzík\iso\game.cpp(102): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file Game.cpp)
+     1>c:\users\eliška\desktop\honzík\iso\game.cpp(105): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data (compiling source file Game.cpp)
+         Windows.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Eliška\Desktop\Honzík\ISO\Debug\Isometric.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Eliška\Desktop\Honzík\ISO\Debug\Isometric.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Eliška\Desktop\Honzík\ISO\Debug\Isometric.lib" /MACHINE:X86 Debug\D3DGraphics.obj
+         Debug\Game.obj
+         Debug\Keyboard.obj
+         Debug\Mouse.obj
+         Debug\Sound.obj
+         Debug\Timer.obj
+         Debug\Windows.obj
+         Chrajdal's Game.vcxproj -> C:\Users\Eliška\Desktop\Honzík\ISO\Debug\Isometric.exe
+     1>Done Building Project "C:\Users\Eliška\Desktop\Honzík\ISO\Chrajdal's Game.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.93
