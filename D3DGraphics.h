@@ -28,7 +28,7 @@ public:
 	static const unsigned int	SCREENWIDTH = 1000;
 	static const unsigned int	SCREENHEIGHT = 1000;
 private:
-	const D3DCOLOR		FILLVALUE =		D3DCOLOR_XRGB(5,5,5);
+	const D3DCOLOR		FILLVALUE = (unsigned long)4294901760;
 	IDirect3D9*			pDirect3D;
 	IDirect3DDevice9*	pDevice;
 	IDirect3DSurface9*	pBackBuffer;

@@ -9,7 +9,12 @@ using namespace std;
 vector<vector<D3DCOLOR>> g_tile_map;
 
 unsigned int g_size = 100;
+
+// -----------------------------------------
+// error this does not work this way
 double offX = g_size / 2, offY = g_size / 2;
+// -----------------------------------------
+
 unsigned int g_tile_height = 50;
 unsigned int g_tile_width = g_tile_height * 2;
 
@@ -40,7 +45,7 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 		vector<D3DCOLOR> tmp;
 		for (unsigned int j = 0; j < g_size; ++j)
 		{
-			tmp.push_back(D3DCOLOR_XRGB(rand() % 55, rand() % 200 + 55, rand() % 55));
+			tmp.push_back(D3DCOLOR_XRGB(rand() % 55, rand() % 200 + 55, rand() % 55));	
 		}
 		g_tile_map.push_back(tmp);
 	}
@@ -71,7 +76,6 @@ void Game::UpdateModel()
 {
 }
 
-
 void Game::ComposeFrame()
 {
 	if (kbd.KeyIsPressed(VK_ESCAPE))
@@ -98,11 +102,11 @@ void Game::ComposeFrame()
 		int x = mouse.GetMouseX();
 		int y = mouse.GetMouseY();
 
-		int mouse_grid_x = floor((y / g_tile_height) + (x / g_tile_width));
-		int mouse_grid_y = floor((-x / g_tile_width) + (y / g_tile_height));
+		int mouse_grid_x = floor((y / g_tile_height) + (x / g_tile_width) + g_tile_width / 2);
+		int mouse_grid_y = floor((-x / g_tile_width) + (y / g_tile_height + g_tile_height / 2));
 		
 		//if (tile_x + floor(offX) >= 0 && tile_x + floor(offX) < g_tile_map.size() && tile_y + floor(offY) >= 0 && tile_y + floor(offY) < g_tile_map.size())
-		g_tile_map[mouse_grid_x + offX][mouse_grid_y + offY] = RED;
+		//g_tile_map[mouse_grid_x + offX][mouse_grid_y + offY] = RED;
 	}
 	
 	handle_user();
@@ -124,22 +128,22 @@ void Game::handle_user()
 	if (kbd.KeyIsPressed(VK_DOWN))
 	{
 		//if (offY < g_tile_map.size())
-			offY += speed;
+		offY += speed;
 	}
 	if (kbd.KeyIsPressed(VK_UP))
 	{
 		//if (offY > 0)
-			offY -= speed;
+		offY -= speed;
 	}
 	if (kbd.KeyIsPressed(VK_RIGHT))
 	{
 		//if (offX > 0)
-			offX -= speed;
+		offX -= speed;
 	}
 	if (kbd.KeyIsPressed(VK_LEFT))
 	{
 		//if (offX < g_tile_map.size())
-			offX += speed;
+		offX += speed;
 	}
 	if (kbd.KeyIsPressed(VK_SPACE))
 	{
