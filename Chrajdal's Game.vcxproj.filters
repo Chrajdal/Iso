@@ -50,6 +50,9 @@
     <ClInclude Include="mymath.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="tile_map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -72,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="Windows.cpp">
       <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="tile_map.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

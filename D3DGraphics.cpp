@@ -233,21 +233,29 @@ void D3DGraphics::draw_tile(int tile_x, int tile_y, int tile_height, int tile_wi
 	//if (y - tile_height / 2 < 0 || y + tile_height / 2 >= SCREENHEIGHT)
 	//	return;
 
-	if (x - 1 < 0 || x + 1 >= SCREENWIDTH)
+	//if (x - 1 < 0 || x + 1 >= SCREENWIDTH)
+	//	return;
+	//if (y - 1 < 0 || y + 1 >= SCREENHEIGHT)
+	//	return;
+
+	// is tile in window
+	if (x < 0 || x > SCREENWIDTH)
 		return;
-	if (y - 1 < 0 || y + 1 >= SCREENHEIGHT)
+	if (y < 0 || y > SCREENHEIGHT)
 		return;
 
 	for (int i = 0; i < tile_height / 2; ++i)
 	{
 		for (int j = x - 2 * i; j < x + 2 * i; ++j)
 		{
-			//if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
+			// are pixels of tile in window
+			if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
 				PutPixel(j, y - tile_height / 2 + i, c);
 		}
 		for (int j = x - (tile_height - 2 * i); j < x + (tile_height - 2 * i); ++j)
 		{
-			//if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
+			// are pixels of tile in window
+			if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
 				PutPixel(j, y + i, c);
 		}
 	}

@@ -25,8 +25,8 @@ public:
 	void BeginFrame();
 	void EndFrame();
 public:
-	static const unsigned int	SCREENWIDTH = 1000;
-	static const unsigned int	SCREENHEIGHT = 1000;
+	static const unsigned int	SCREENWIDTH = 1024;
+	static const unsigned int	SCREENHEIGHT = 1024;
 private:
 	const D3DCOLOR		FILLVALUE = (unsigned long)4294901760;
 	IDirect3D9*			pDirect3D;

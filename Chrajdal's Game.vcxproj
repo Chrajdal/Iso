@@ -97,6 +97,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="tile_map.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
@@ -110,6 +111,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="tile_map.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Windows.cpp" />
   </ItemGroup>
