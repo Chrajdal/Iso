@@ -1,29 +1,14 @@
-﻿Build started 16.04.2017 19:51:41.
-     1>Project "C:\Users\Eliška\Desktop\Honzík\ISO\Chrajdal's Game.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /MP /O2 /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS- /Gy /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
-         Game.cpp
-     1>Game.cpp(31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-     1>Game.cpp(32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-     1>Game.cpp(91): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-     1>Game.cpp(105): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-     1>Game.cpp(106): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Eliška\Desktop\Honzík\ISO\Release\Isometric.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Eliška\Desktop\Honzík\ISO\Release\Isometric.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Eliška\Desktop\Honzík\ISO\Release\Isometric.lib" /MACHINE:X86 /SAFESEH Release\D3DGraphics.obj
-         Release\Game.obj
-         Release\Keyboard.obj
-         Release\Mouse.obj
-         Release\Sound.obj
-         Release\Timer.obj
-         Release\Windows.obj
-         Generating code
-         3 of 406 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
-           0 functions were new in current compilation
-           1 functions had inline decision re-evaluated but remain unchanged
-         Finished generating code
-         Chrajdal's Game.vcxproj -> C:\Users\Eliška\Desktop\Honzík\ISO\Release\Isometric.exe
-     1>Done Building Project "C:\Users\Eliška\Desktop\Honzík\ISO\Chrajdal's Game.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:02.10
+﻿  D3DGraphics.cpp
+  Windows.cpp
+  tile_map.cpp
+C:\Users\janch\Desktop\C++stuff\ISO\Windows.cpp(88,1): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(243): message : see declaration of 'freopen'
+  Game.cpp
+C:\Users\janch\Desktop\C++stuff\ISO\Game.cpp(90,44): warning C4018: '<': signed/unsigned mismatch
+C:\Users\janch\Desktop\C++stuff\ISO\Game.cpp(90,103): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  13 of 330 functions ( 3.9%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Chrajdal's Game.vcxproj -> C:\Users\janch\Desktop\C++stuff\ISO\Release\Isometric.exe

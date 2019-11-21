@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
 
-#define PI (float)M_PI
+static const float MyPI = std::asinf(1.0f) * 2;
 
 template <typename T>
 inline T sq( T val )

@@ -1,13 +1,15 @@
 #include "Game.h"
 #include "Colors.h"
+#include <iostream>
 #include <cmath>
 #include <ctime>
 #include <vector>
+#include "Timer.h"
 
 using namespace std;
 
 vector<vector<D3DCOLOR>> g_tile_map;
-unsigned int g_size = 50;
+unsigned int g_size = 150;
 
 unsigned int g_tile_height = 32;
 unsigned int g_tile_width = g_tile_height * 2;
@@ -28,6 +30,8 @@ void screen_to_tile_position(int & tile_x, int & tile_y, int screen_x, int scree
 	tile_x = int(double(screen_x) / (double)tile_w + double(screen_y) / (double)tile_h);
 	tile_y = int(double(screen_y) / (double)tile_h - double(screen_x) / (double)tile_w);
 }
+
+static Timer timer;
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 :	gfx( hWnd ),
@@ -61,10 +65,14 @@ Game::~Game()
 
 void Game::Go()
 {
+	timer.restart();
 	UpdateModel();
 	gfx.BeginFrame();
 	ComposeFrame();
 	gfx.EndFrame();
+
+	auto elapsed = timer.elapsed();
+	std::cout << "FPS = " << 1000.0 / elapsed << std::endl;
 }
 
 void Game::UpdateModel()
@@ -107,29 +115,29 @@ void Game::handle_user()
 {
 	double speed = 0.25;
 
-	//if (mouse.LeftIsPressed())
-	//{
-	//	int x = 65; //mouse.GetMouseX();
-	//	int y = 95; //mouse.GetMouseY();
-	//	int mouse_grid_x;
-	//	int mouse_grid_y;
-	//	screen_to_tile_position(mouse_grid_x, mouse_grid_y, x, y, g_tile_width, g_tile_height);
-	//
-	//	if (mouse_grid_x >= 0 && mouse_grid_x < (int)g_tile_map.size() - 1 && mouse_grid_y >= 0 && mouse_grid_y < (int)g_tile_map.size() - 1)
-	//		g_tile_map[mouse_grid_y][mouse_grid_x] = RED;
-	//
-	//}
-	//if (mouse.RightIsPressed())
-	//{
-	//	int x = 65;
-	//	int y = 95;
-	//	int mouse_grid_x;
-	//	int mouse_grid_y;
-	//	screen_to_tile_position(mouse_grid_x, mouse_grid_y, x, y, g_tile_width, g_tile_height);
-	//
-	//	if (mouse_grid_x >= 0 && mouse_grid_x < (int)g_tile_map.size() - 1 && mouse_grid_y >= 0 && mouse_grid_y < (int)g_tile_map.size() - 1)
-	//		g_tile_map[mouse_grid_y][mouse_grid_x] = D3DCOLOR_XRGB(rand() % 55, rand() % 200 + 55, rand() % 55);
-	//}
+	if (mouse.LeftIsPressed())
+	{
+		int x = 65; //mouse.GetMouseX();
+		int y = 95; //mouse.GetMouseY();
+		int mouse_grid_x;
+		int mouse_grid_y;
+		screen_to_tile_position(mouse_grid_x, mouse_grid_y, x, y, g_tile_width, g_tile_height);
+	
+		if (mouse_grid_x >= 0 && mouse_grid_x < (int)g_tile_map.size() - 1 && mouse_grid_y >= 0 && mouse_grid_y < (int)g_tile_map.size() - 1)
+			g_tile_map[mouse_grid_y][mouse_grid_x] = RED;
+	
+	}
+	if (mouse.RightIsPressed())
+	{
+		int x = 65;
+		int y = 95;
+		int mouse_grid_x;
+		int mouse_grid_y;
+		screen_to_tile_position(mouse_grid_x, mouse_grid_y, x, y, g_tile_width, g_tile_height);
+	
+		if (mouse_grid_x >= 0 && mouse_grid_x < (int)g_tile_map.size() - 1 && mouse_grid_y >= 0 && mouse_grid_y < (int)g_tile_map.size() - 1)
+			g_tile_map[mouse_grid_y][mouse_grid_x] = D3DCOLOR_XRGB(rand() % 55, rand() % 200 + 55, rand() % 55);
+	}
 
 	if (kbd.KeyIsPressed(VK_DOWN))
 	{

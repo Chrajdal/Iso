@@ -84,9 +84,12 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 {
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX),CS_CLASSDC,MsgProc,0,0,
 					  GetModuleHandle(NULL),NULL,NULL,NULL,NULL,
-					  L"Iso Window",NULL };
+					  "Iso Window",NULL };
 	RegisterClassEx(&wc);
 
 	RECT wr;
@@ -119,6 +122,6 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 		}
 	}
 
-	UnregisterClass(L"Iso Window", wc.hInstance);
+	UnregisterClass("Iso Window", wc.hInstance);
 	return 0;
 }
