@@ -21,31 +21,10 @@ public:
 	void DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c );
 	void DrawCircle( int centerX,int centerY,int radius,D3DCOLOR c );
 	void DrawDisc(int centerX, int centerY, int radius, D3DCOLOR CColor);
-	//void draw_tile(int x, int y, D3DCOLOR c);
-	void draw_tile(int tile_x, int tile_y, int tile_height, int tile_width, D3DCOLOR c);
-	void draw_rect(int x, int y, int w, int h, D3DCOLOR c);
-	void draw_rect_fill(int x, int y, int w, int h, D3DCOLOR c);
-
-	void DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1)
-	{
-		if (sprite == nullptr)
-			return;
-
-		if (scale > 1)
-		{
-			for (int32_t i = 0; i < w; i++)
-				for (int32_t j = 0; j < h; j++)
-					for (uint32_t is = 0; is < scale; is++)
-						for (uint32_t js = 0; js < scale; js++)
-							PutColor(x + (i * scale) + is, y + (j * scale) + js, sprite->GetColor(i + ox, j + oy).dword);
-		}
-		else
-		{
-			for (int32_t i = 0; i < w; i++)
-				for (int32_t j = 0; j < h; j++)
-					PutColor(x + i, y + j, sprite->GetColor(i + ox, j + oy).dword);
-		}
-	}
+	void DrawRect(int x, int y, int w, int h, D3DCOLOR c);
+	void DrawRectFill(int x, int y, int w, int h, D3DCOLOR c);
+	void DrawSprite(int32_t x, int32_t y, Sprite* sprite, uint32_t scale = 1);
+	void DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1);
 
 	void ConstructFontSheet()
 	{
@@ -136,4 +115,11 @@ private:
 	IDirect3DSurface9*	pBackBuffer;
 	D3DCOLOR *			pSysBuffer;
 	Sprite* fontSprite = nullptr;
+public:
+	enum nPixelMode {
+		NORMAL,
+		ALPHA
+	};
+
+	nPixelMode m_mode;
 };

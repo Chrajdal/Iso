@@ -8,12 +8,19 @@
 
 static Timer timer;
 
-Vei2 vWorld{ 15, 10 };
+Vei2 vWorldSize{ 555, 555 };
 Vei2 vTileSize{ 40, 20 };
-Vei2 origin{ 5, 1 };
+Vei2 vOrigin{ 12, -10 };
 
-std::vector<std::vector<int>> world(vWorld.y, std::vector<int>(vWorld.x, 0));
+std::vector<std::vector<int>> pWorld (vWorldSize.y, std::vector<int>(vWorldSize.x, 0));
 olc::Sprite* sprIsom = nullptr;
+
+enum selection
+{
+	grass = 1, tree = 2, dead_tree = 3, sand = 4, water = 5
+};
+
+selection user_selection = grass;
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 :	gfx( hWnd ),
@@ -21,15 +28,6 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 	kbd( kServer ),
 	mouse( mServer )
 {
-	srand((unsigned)time(0));
-
-
-	for (int y = 0; y < vWorld.y; ++y) {
-		for (int x = 0; x < vWorld.x; ++x) {
-			world[y][x] = 0;
-		}
-	}
-
 	// Load sprites used in demonstration
 	sprIsom = new olc::Sprite("isometric_demo.png");
 }
@@ -46,8 +44,8 @@ void Game::Go()
 	ComposeFrame();
 	gfx.EndFrame();
 
-	auto elapsed = timer.elapsed();
-	std::cout << "FPS = " << 1000.0 / elapsed << std::endl;
+	auto elapsed = timer.elapsedns();
+	std::cout << "FPS = " << 1e9 / elapsed << std::endl;
 }
 
 void Game::UpdateModel()
@@ -59,28 +57,66 @@ void Game::ComposeFrame()
 	if (kbd.KeyIsPressed(VK_ESCAPE))
 		exit(0);
 
-	auto ToScreen = [&](int x, int y) {
+	Vei2 vMouse = { mouse.GetMouseX(), mouse.GetMouseY() };
+
+	// Work out active cell
+	Vei2 vCell = { vMouse.x / vTileSize.x, vMouse.y / vTileSize.y };
+
+	// Work out mouse offset into cell
+	Vei2 vOffset = { vMouse.x % vTileSize.x, vMouse.y % vTileSize.y };
+
+	// Sample into cell offset colour
+	CColor col = sprIsom->GetColor(3 * vTileSize.x + vOffset.x, vOffset.y);
+
+	// Work out selected cell by transforming screen cell
+	Vei2 vSelected =
+	{
+		(vCell.y - vOrigin.y) + (vCell.x - vOrigin.x),
+		(vCell.y - vOrigin.y) - (vCell.x - vOrigin.x)
+	};
+
+	// "Bodge" selected cell by sampling corners
+	if (col == CColors::Red) vSelected += {-1, +0};
+	if (col == CColors::Blue) vSelected += {+0, -1};
+	if (col == CColors::Green) vSelected += {+0, +1};
+	if (col == CColors::Yellow) vSelected += {+1, +0};
+
+	// Handle mouse click to toggle if a tile is visible or not
+	if (mouse.LeftIsPressed())
+	{
+		// Guard array boundary
+		if (vSelected.x >= 0 && vSelected.x < vWorldSize.x && vSelected.y >= 0 && vSelected.y < vWorldSize.y)
+			pWorld[vSelected.y][vSelected.x] = user_selection;
+	}
+
+	// Labmda function to convert "world" coordinate into screen space
+	auto ToScreen = [&](int x, int y)
+	{
 		return Vei2
 		{
-			(origin.x * vTileSize.x) + (x - y) * vTileSize.x / 2,
-			(origin.y * vTileSize.y) + (x + y) * vTileSize.y / 2
+			(vOrigin.x * vTileSize.x) + (x - y) * (vTileSize.x / 2),
+			(vOrigin.y * vTileSize.y) + (x + y) * (vTileSize.y / 2)
 		};
 	};
 
-	Vei2 vMouse = { mouse.GetMouseX(), mouse.GetMouseY() };
-	Vei2 vCell = { vMouse.x / vTileSize.x, vMouse.y / vTileSize.y };
+	// Draw World - has binary transparancy so enable masking
+	//SetPixelMode(olc::Pixel::MASK);
+	gfx.m_mode = gfx.ALPHA;
 
-	Vei2 vSelected =
+	// (0,0) is at top, defined by vOrigin, so draw from top to bottom
+	// to ensure tiles closest to camera are drawn last
+	for (int y = 0; y < vWorldSize.y; y++)
 	{
-		(vCell.y - origin.y) + (vCell.x - origin.x),
-		(vCell.y - origin.y) - (vCell.x - origin.x)
-	};
-	
-	for (int y = 0; y < vWorld.y; ++y) {
-		for (int x = 0; x < vWorld.x; ++x) {
-			Vei2 vecWorld = ToScreen(x, y);
-
-			switch (world[y][x]) {
+		for (int x = 0; x < vWorldSize.x; x++)
+		{
+			// Convert cell coordinate to world space
+			Vei2 vWorld = ToScreen(x, y);
+			if(	vWorld.x > -vTileSize.x &&
+				vWorld.x < D3DGraphics::SCREENWIDTH + vTileSize.x &&
+				vWorld.y > -vTileSize.y &&
+				vWorld.y < D3DGraphics::SCREENHEIGHT + vTileSize.y)
+			switch (pWorld[y][x])
+			{
 			case 0:
 				// Invisble Tile
 				gfx.DrawPartialSprite(vWorld.x, vWorld.y, sprIsom, 1 * vTileSize.x, 0, vTileSize.x, vTileSize.y);
@@ -107,8 +143,10 @@ void Game::ComposeFrame()
 				break;
 			}
 		}
-
 	}
+
+	// Draw Selected Cell - Has varying alpha components
+	gfx.m_mode = gfx.ALPHA;
 
 	// Convert selected cell coordinate to world space
 	Vei2 vSelectedWorld = ToScreen(vSelected.x, vSelected.y);
@@ -116,23 +154,24 @@ void Game::ComposeFrame()
 	// Draw "highlight" tile
 	gfx.DrawPartialSprite(vSelectedWorld.x, vSelectedWorld.y, sprIsom, 0 * vTileSize.x, 0, vTileSize.x, vTileSize.y);
 
-	// Draw Hovered Cell Boundary
-	gfx.draw_rect(vCell.x * vTileSize.x, vCell.y * vTileSize.y, vTileSize.x, vTileSize.y, CColors::Red.dword);
+	// Go back to normal drawing with no expected transparency
+	gfx.m_mode = gfx.NORMAL;
 
-	gfx.DrawString(4, 4, "Mouse   : " + std::to_string(vMouse.x) + ", " + std::to_string(vMouse.y), CColors::Yellow);
-	gfx.DrawString(4, 14, "Cell    : " + std::to_string(vCell.x) + ", " + std::to_string(vCell.y), CColors::Yellow);
-	gfx.DrawString(4, 24, "Selected: " + std::to_string(vSelected.x) + ", " + std::to_string(vSelected.y), CColors::Yellow);
+	// Draw Hovered Cell Boundary
+	//DrawRect(vCell.x * vTileSize.x, vCell.y * vTileSize.y, vTileSize.x, vTileSize.y, olc::RED);
+
+	// Draw Debug Info
+	gfx.DrawString(4, 4, "Mouse   : " + std::to_string(vMouse.x) + ", " + std::to_string(vMouse.y),        CColors::Black);
+	gfx.DrawString(4, 14, "Cell    : " + std::to_string(vCell.x) + ", " + std::to_string(vCell.y),         CColors::Black);
+	gfx.DrawString(4, 24, "Selected: " + std::to_string(vSelected.x) + ", " + std::to_string(vSelected.y), CColors::Black);
 
 	handle_user();
 }
 
 void Game::handle_user()
 {
-	double speed = 0.25;
-
 	if (mouse.LeftIsPressed())
 	{
-	
 	
 	}
 	if (mouse.RightIsPressed())
@@ -140,19 +179,36 @@ void Game::handle_user()
 	
 	}
 
-	if (kbd.KeyIsPressed(VK_DOWN))
-	{
-	}
 	if (kbd.KeyIsPressed(VK_UP))
 	{
+		vOrigin.y++;
 	}
-	if (kbd.KeyIsPressed(VK_RIGHT))
+	if (kbd.KeyIsPressed(VK_DOWN))
 	{
+		vOrigin.y--;
 	}
 	if (kbd.KeyIsPressed(VK_LEFT))
 	{
+		vOrigin.x++;
 	}
-	if (kbd.KeyIsPressed(VK_SPACE))
+	if (kbd.KeyIsPressed(VK_RIGHT))
 	{
+		vOrigin.x--;
+	}
+
+	if (kbd.KeyIsPressed(0x31)) {
+		user_selection = selection::grass;
+	}
+	if (kbd.KeyIsPressed(0x32)){
+		user_selection = selection::tree;
+	}
+	if (kbd.KeyIsPressed(0x33)){
+		user_selection = selection::dead_tree;
+	}
+	if (kbd.KeyIsPressed(0x34)){
+		user_selection = selection::sand;
+	}
+	if (kbd.KeyIsPressed(0x35)){
+		user_selection = selection::water;
 	}
 }

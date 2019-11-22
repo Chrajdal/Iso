@@ -33,13 +33,13 @@ public:
 	}
 	inline bool operator ==(const CColor& rhs) const
 	{
-		return dword == rhs.dword;
-		//return GetR() == rhs.GetR() && GetG() == rhs.GetG() && GetB() == rhs.GetB();
+		//return dword == rhs.dword;
+		return GetR() == rhs.GetR() && GetG() == rhs.GetG() && GetB() == rhs.GetB();
 	}
 	inline bool operator !=(const CColor& rhs) const
 	{
-		return dword != rhs.dword;
-		//return GetR() != rhs.GetR() || GetG() != rhs.GetG() || GetB() != rhs.GetB();
+		//return dword != rhs.dword;
+		return GetR() != rhs.GetR() || GetG() != rhs.GetG() || GetB() != rhs.GetB();
 	}
 	constexpr unsigned char GetX() const
 	{
@@ -88,6 +88,10 @@ namespace CColors
 	static constexpr CColor MakeRGB(unsigned char r, unsigned char g, unsigned char b)
 	{
 		return (r << 16) | (g << 8) | b;
+	}
+	static constexpr CColor MakeRGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+	{
+		return (a << 24u) | (r << 16u) | (g << 8u) | b;
 	}
 	static constexpr CColor White = MakeRGB(255u, 255u, 255u);
 	static constexpr CColor Black = MakeRGB(0u, 0u, 0u);

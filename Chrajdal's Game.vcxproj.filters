@@ -44,9 +44,6 @@
     <ClInclude Include="mymath.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="tile_map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
@@ -57,6 +54,9 @@
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="olcArtifacts.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
@@ -79,13 +79,13 @@
     <ClCompile Include="Windows.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="tile_map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="ResourcePack.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
   </ItemGroup>

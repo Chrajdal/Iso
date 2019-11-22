@@ -62,7 +62,8 @@ D3DGraphics::~D3DGraphics()
 
 void D3DGraphics::BeginFrame()
 {
-	memset( pSysBuffer,FILLVALUE,sizeof(D3DCOLOR )* SCREENWIDTH * SCREENHEIGHT );
+	//memset( pSysBuffer,FILLVALUE,sizeof(D3DCOLOR )* SCREENWIDTH * SCREENHEIGHT );
+	std::fill_n(pSysBuffer, SCREENWIDTH * SCREENHEIGHT, CColors::MakeRGB(123, 23, 213).dword);
 }
 
 void D3DGraphics::EndFrame()
@@ -85,13 +86,26 @@ void D3DGraphics::EndFrame()
 	assert( !FAILED( result ) );
 }
 
-void D3DGraphics::PutColor( int x,int y,D3DCOLOR  c )
-{	
-	assert( x >= 0 );
-	assert( y >= 0 );
-	assert( x < SCREENWIDTH );
-	assert( y < SCREENHEIGHT );
-	pSysBuffer[ x + SCREENWIDTH * y ] = c;
+void D3DGraphics::PutColor( int x,int y,D3DCOLOR c )
+{
+	if ((x >= 0)
+		&& (y >= 0)
+		&& (x < SCREENWIDTH)
+		&& (y < SCREENHEIGHT)) {
+		CColor theColor = c;
+		if (m_mode == nPixelMode::ALPHA)
+		{
+			CColor d = GetColor(x,y);
+			CColor col = c;
+			float a = (float)(col.GetA() / 255.0f) * 1.0f;
+			float c = 1.0f - a;
+			float r = a * (float)col.GetR() + c * (float)d.GetR();
+			float g = a * (float)col.GetG() + c * (float)d.GetG();
+			float b = a * (float)col.GetB() + c * (float)d.GetB();
+			theColor = CColor((uint8_t)r, (uint8_t)g, (uint8_t)b);
+		}
+		pSysBuffer[x + SCREENWIDTH * y] = theColor.dword;
+	}
 }
 
 D3DCOLOR  D3DGraphics::GetColor( int x,int y ) const
@@ -191,80 +205,7 @@ void D3DGraphics::DrawDisc(int centerX, int centerY, int radius, D3DCOLOR  CColo
 	}
 }
 
-/*
-void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR  c)
-{
-	int tile_height = 45; // Beware - must be even!
-	int tile_width = tile_height * 2;
-	int x = (tile_x - tile_y) * tile_width / 2;// + (SCREENWIDTH / 2);
-	int y = (tile_x + tile_y) * tile_height / 2;// + (SCREENHEIGHT / 2);
-
-	for (int i = 0; i < tile_height / 2; ++i)
-	{
-		for (int j = x - 2 * i; j < x + 2 * i; ++j)
-		{
-			if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
-				PutColor(j, y - tile_height / 2 + i, c);
-		}
-		for (int j = x - (tile_height - 2 * i); j < x + (tile_height - 2 * i); ++j)
-		{
-			if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
-				PutColor(j, y + i, c);
-		}
-			
-	}
-
-
-	//Vec2 top(x, y - tile_height / 2);
-	//Vec2 right(x + tile_width / 2, y);
-	//Vec2 left(x - tile_width / 2, y);
-	//Vec2 down(x, y + tile_height / 2);
-	//DrawLine(top, right, BLACK);
-	//DrawLine(top, left, BLACK);
-	//DrawLine(down, right, BLACK);
-	//DrawLine(down, left, BLACK);
-}
-*/
-
-void D3DGraphics::draw_tile(int tile_x, int tile_y, int tile_height, int tile_width, D3DCOLOR  c)
-{
-	int x = (tile_x - tile_y) * tile_width / 2;
-	int y = (tile_x + tile_y) * tile_height / 2;
-	
-	//if (x - tile_width / 2 < 0 || x + tile_width / 2 >= SCREENWIDTH)
-	//	return;
-	//if (y - tile_height / 2 < 0 || y + tile_height / 2 >= SCREENHEIGHT)
-	//	return;
-
-	//if (x - 1 < 0 || x + 1 >= SCREENWIDTH)
-	//	return;
-	//if (y - 1 < 0 || y + 1 >= SCREENHEIGHT)
-	//	return;
-
-	// is tile in window
-	if (x < 0 || x > SCREENWIDTH)
-		return;
-	if (y < 0 || y > SCREENHEIGHT)
-		return;
-
-	for (int i = 0; i < tile_height / 2; ++i)
-	{
-		for (int j = x - 2 * i; j < x + 2 * i; ++j)
-		{
-			// are CColors of tile in window
-			if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
-				PutColor(j, y - tile_height / 2 + i, c);
-		}
-		for (int j = x - (tile_height - 2 * i); j < x + (tile_height - 2 * i); ++j)
-		{
-			// are CColors of tile in window
-			if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
-				PutColor(j, y + i, c);
-		}
-	}
-}
-
-void D3DGraphics::draw_rect(int x, int y, int w, int h, D3DCOLOR c)
+void D3DGraphics::DrawRect(int x, int y, int w, int h, D3DCOLOR c)
 {
 	DrawLine(x, y, x, y + h, c);
 	DrawLine(x, y, x + w, y, c);
@@ -272,10 +213,49 @@ void D3DGraphics::draw_rect(int x, int y, int w, int h, D3DCOLOR c)
 	DrawLine(x, y + h, x + w, y + h, c);
 }
 
-void D3DGraphics::draw_rect_fill(int x, int y, int w, int h, D3DCOLOR c)
+void D3DGraphics::DrawRectFill(int x, int y, int w, int h, D3DCOLOR c)
 {
 	for (int i = y; i < y + h; ++i)
 		for (int j = x; j < x + w; ++j)
 			PutColor(j, i, c);
 }
 
+void D3DGraphics::DrawSprite(int32_t x, int32_t y, Sprite* sprite, uint32_t scale)
+{
+	if (sprite == nullptr)
+		return;
+	if (scale > 1)
+	{
+		for (int32_t i = 0; i < sprite->width; i++)
+			for (int32_t j = 0; j < sprite->height; j++)
+				for (uint32_t is = 0; is < scale; is++)
+					for (uint32_t js = 0; js < scale; js++)
+						PutColor(x + (i * scale) + is, y + (j * scale) + js, sprite->GetColor(i, j).dword);
+	}
+	else
+	{
+		for (int32_t i = 0; i < sprite->width; i++)
+			for (int32_t j = 0; j < sprite->height; j++)
+				PutColor(x + i, y + j, sprite->GetColor(i, j).dword);
+	}
+}
+
+void D3DGraphics::DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale)
+{
+	if (sprite == nullptr)
+		return;
+	if (scale > 1)
+	{
+		for (int32_t i = 0; i < w; i++)
+			for (int32_t j = 0; j < h; j++)
+				for (uint32_t is = 0; is < scale; is++)
+					for (uint32_t js = 0; js < scale; js++)
+						PutColor(x + (i * scale) + is, y + (j * scale) + js, sprite->GetColor(i + ox, j + oy).dword);
+	}
+	else
+	{
+		for (int32_t i = 0; i < w; i++)
+			for (int32_t j = 0; j < h; j++)
+				PutColor(x + i, y + j, sprite->GetColor(i + ox, j + oy).dword);
+	}
+}

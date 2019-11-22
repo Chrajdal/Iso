@@ -175,8 +175,8 @@
     <ClInclude Include="ResourcePack.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprite.h" />
-    <ClInclude Include="tile_map.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
@@ -191,7 +191,7 @@
     <ClCompile Include="ResourcePack.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="tile_map.cpp" />
+    <ClCompile Include="utils.cpp" />
     <ClCompile Include="Windows.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
