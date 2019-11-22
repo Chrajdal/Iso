@@ -1,7 +1,8 @@
 #include "D3DGraphics.h"
 #include "mymath.h"
-#include <assert.h>
+#include <cassert>
 #pragma comment( lib,"d3d9.lib" )
+
 
 D3DGraphics::D3DGraphics( HWND hWnd )
 	:
@@ -30,7 +31,9 @@ pSysBuffer( NULL )
 	result = pDevice->GetBackBuffer( 0,0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer );
 	assert( !FAILED( result ) );
 
-	pSysBuffer = new D3DCOLOR[ SCREENWIDTH * SCREENHEIGHT ];
+	pSysBuffer = new D3DCOLOR [ SCREENWIDTH * SCREENHEIGHT ];
+
+	ConstructFontSheet();
 }
 
 D3DGraphics::~D3DGraphics()
@@ -59,7 +62,7 @@ D3DGraphics::~D3DGraphics()
 
 void D3DGraphics::BeginFrame()
 {
-	memset( pSysBuffer,FILLVALUE,sizeof(D3DCOLOR)* SCREENWIDTH * SCREENHEIGHT );
+	memset( pSysBuffer,FILLVALUE,sizeof(D3DCOLOR )* SCREENWIDTH * SCREENHEIGHT );
 }
 
 void D3DGraphics::EndFrame()
@@ -72,7 +75,7 @@ void D3DGraphics::EndFrame()
 
 	for( int y = 0; y < SCREENHEIGHT; y++ )
 	{
-		memcpy( &((BYTE*)backRect.pBits)[backRect.Pitch * y],&pSysBuffer[SCREENWIDTH * y],sizeof(D3DCOLOR)* SCREENWIDTH );
+		memcpy( &((BYTE*)backRect.pBits)[backRect.Pitch * y],&pSysBuffer[SCREENWIDTH * y],sizeof(D3DCOLOR )* SCREENWIDTH );
 	}
 
 	result = pBackBuffer->UnlockRect( );
@@ -82,7 +85,7 @@ void D3DGraphics::EndFrame()
 	assert( !FAILED( result ) );
 }
 
-void D3DGraphics::PutPixel( int x,int y,D3DCOLOR c )
+void D3DGraphics::PutColor( int x,int y,D3DCOLOR  c )
 {	
 	assert( x >= 0 );
 	assert( y >= 0 );
@@ -91,7 +94,7 @@ void D3DGraphics::PutPixel( int x,int y,D3DCOLOR c )
 	pSysBuffer[ x + SCREENWIDTH * y ] = c;
 }
 
-D3DCOLOR D3DGraphics::GetPixel( int x,int y ) const
+D3DCOLOR  D3DGraphics::GetColor( int x,int y ) const
 {
 	assert( x >= 0 );
 	assert( y >= 0 );
@@ -100,14 +103,14 @@ D3DCOLOR D3DGraphics::GetPixel( int x,int y ) const
 	return pSysBuffer[ x + SCREENWIDTH * y ];
 }
 
-void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c )
+void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR  c )
 {
 	const int dx = x2 - x1;
 	const int dy = y2 - y1;
 
 	if( dy == 0 && dx == 0 )
 	{
-		PutPixel( x1,y1,c );
+		PutColor( x1,y1,c );
 	}
 	else if( abs( dy ) > abs( dx ) )
 	{
@@ -125,7 +128,7 @@ void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c )
 		for( int y = y1; y <= y2; y = y + 1 )
 		{
 			int x = (int)(m*y + b + 0.5f);
-			PutPixel( x,y,c );
+			PutColor( x,y,c );
 		}
 	}
 	else
@@ -144,30 +147,30 @@ void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c )
 		for( int x = x1; x <= x2; x = x + 1 )
 		{
 			int y = (int)(m*x + b + 0.5f);
- 			PutPixel( x,y,c );
+ 			PutColor( x,y,c );
 		}
 	}
 }
 
-void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,D3DCOLOR color )
+void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,D3DCOLOR  CColor )
 {
 	int rSquared = sq( radius );
 	int xPivot = (int)( radius * 0.70710678118f + 0.5f );
 	for( int x = 0; x <= xPivot; x++ )
 	{
 		int y = (int)(sqrt( (float)( rSquared - sq( x ) ) ) + 0.5f);
-		PutPixel( centerX + x,centerY + y,color );
-		PutPixel( centerX - x,centerY + y,color );
-		PutPixel( centerX + x,centerY - y,color );
-		PutPixel( centerX - x,centerY - y,color );
-		PutPixel( centerX + y,centerY + x,color );
-		PutPixel( centerX - y,centerY + x,color );
-		PutPixel( centerX + y,centerY - x,color );
-		PutPixel( centerX - y,centerY - x,color );
+		PutColor( centerX + x,centerY + y,CColor );
+		PutColor( centerX - x,centerY + y,CColor );
+		PutColor( centerX + x,centerY - y,CColor );
+		PutColor( centerX - x,centerY - y,CColor );
+		PutColor( centerX + y,centerY + x,CColor );
+		PutColor( centerX - y,centerY + x,CColor );
+		PutColor( centerX + y,centerY - x,CColor );
+		PutColor( centerX - y,centerY - x,CColor );
 	}
 }
 
-void D3DGraphics::DrawDisc(int centerX, int centerY, int radius, D3DCOLOR color)
+void D3DGraphics::DrawDisc(int centerX, int centerY, int radius, D3DCOLOR  CColor)
 {
 	int rSquared = sq(radius);
 	int xPivot = (int)(radius * 0.70710678118f + 0.5f);
@@ -176,20 +179,20 @@ void D3DGraphics::DrawDisc(int centerX, int centerY, int radius, D3DCOLOR color)
 		int y = (int)(sqrt((float)(rSquared - sq(x))) + 0.5f);
 		for (int i = 0; i < y; ++i)
 		{
-			PutPixel(centerX + x, centerY + i, color);
-			PutPixel(centerX - x, centerY + i, color);
-			PutPixel(centerX + x, centerY - i, color);
-			PutPixel(centerX - x, centerY - i, color);
-			PutPixel(centerX + i, centerY + x, color);
-			PutPixel(centerX - i, centerY + x, color);
-			PutPixel(centerX + i, centerY - x, color);
-			PutPixel(centerX - i, centerY - x, color);
+			PutColor(centerX + x, centerY + i, CColor);
+			PutColor(centerX - x, centerY + i, CColor);
+			PutColor(centerX + x, centerY - i, CColor);
+			PutColor(centerX - x, centerY - i, CColor);
+			PutColor(centerX + i, centerY + x, CColor);
+			PutColor(centerX - i, centerY + x, CColor);
+			PutColor(centerX + i, centerY - x, CColor);
+			PutColor(centerX - i, centerY - x, CColor);
 		}
 	}
 }
 
 /*
-void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR c)
+void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR  c)
 {
 	int tile_height = 45; // Beware - must be even!
 	int tile_width = tile_height * 2;
@@ -201,12 +204,12 @@ void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR c)
 		for (int j = x - 2 * i; j < x + 2 * i; ++j)
 		{
 			if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
-				PutPixel(j, y - tile_height / 2 + i, c);
+				PutColor(j, y - tile_height / 2 + i, c);
 		}
 		for (int j = x - (tile_height - 2 * i); j < x + (tile_height - 2 * i); ++j)
 		{
 			if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
-				PutPixel(j, y + i, c);
+				PutColor(j, y + i, c);
 		}
 			
 	}
@@ -223,7 +226,7 @@ void D3DGraphics::draw_tile(int tile_x, int tile_y, D3DCOLOR c)
 }
 */
 
-void D3DGraphics::draw_tile(int tile_x, int tile_y, int tile_height, int tile_width, D3DCOLOR c)
+void D3DGraphics::draw_tile(int tile_x, int tile_y, int tile_height, int tile_width, D3DCOLOR  c)
 {
 	int x = (tile_x - tile_y) * tile_width / 2;
 	int y = (tile_x + tile_y) * tile_height / 2;
@@ -248,22 +251,31 @@ void D3DGraphics::draw_tile(int tile_x, int tile_y, int tile_height, int tile_wi
 	{
 		for (int j = x - 2 * i; j < x + 2 * i; ++j)
 		{
-			// are pixels of tile in window
+			// are CColors of tile in window
 			if (j >= 0 && j < SCREENWIDTH && y - tile_height / 2 + i >= 0 && y - tile_height / 2 + i < SCREENHEIGHT)
-				PutPixel(j, y - tile_height / 2 + i, c);
+				PutColor(j, y - tile_height / 2 + i, c);
 		}
 		for (int j = x - (tile_height - 2 * i); j < x + (tile_height - 2 * i); ++j)
 		{
-			// are pixels of tile in window
+			// are CColors of tile in window
 			if (j >= 0 && j < SCREENWIDTH && y + i >= 0 && y + i < SCREENHEIGHT)
-				PutPixel(j, y + i, c);
+				PutColor(j, y + i, c);
 		}
 	}
 }
 
 void D3DGraphics::draw_rect(int x, int y, int w, int h, D3DCOLOR c)
 {
+	DrawLine(x, y, x, y + h, c);
+	DrawLine(x, y, x + w, y, c);
+	DrawLine(x + w, y, x + w, y + h, c);
+	DrawLine(x, y + h, x + w, y + h, c);
+}
+
+void D3DGraphics::draw_rect_fill(int x, int y, int w, int h, D3DCOLOR c)
+{
 	for (int i = y; i < y + h; ++i)
 		for (int j = x; j < x + w; ++j)
-			PutPixel(j, i, c);
+			PutColor(j, i, c);
 }
+

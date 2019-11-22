@@ -15,7 +15,7 @@ public:
 private:
 	void tile_to_screen_position(int tile_x, int tile_y, int & screen_x, int & screen_y, int tile_w, int tile_h);
 	void screen_to_tile_position(int & tile_x, int & tile_y, int screen_x, int screen_y, int tile_w, int tile_h);
-	vector<vector<D3DCOLOR>> map;
+	vector<vector<D3DCOLOR >> map;
 	int tile_h;
 	int tile_w;
 

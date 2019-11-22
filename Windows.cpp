@@ -89,7 +89,12 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX),CS_CLASSDC,MsgProc,0,0,
 					  GetModuleHandle(NULL),NULL,NULL,NULL,NULL,
-					  "Iso Window",NULL };
+		#ifdef _WIN64
+	 "Iso Window",NULL };
+#else //32 bit
+	 L"Iso Window",NULL };
+#endif
+					 
 	RegisterClassEx(&wc);
 
 	RECT wr;
@@ -121,7 +126,10 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 			theGame.Go();
 		}
 	}
-
+#ifdef _WIN64
 	UnregisterClass("Iso Window", wc.hInstance);
+#else //32 bit
+	UnregisterClass(L"Iso Window", wc.hInstance);
+#endif
 	return 0;
 }

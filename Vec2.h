@@ -174,5 +174,6 @@ public:
 	T y;
 };
 
+typedef _Vec2<int> Vei2;
 typedef _Vec2< float > Vec2;
 typedef _Vec2< double > Ved2;

@@ -1,5 +1,5 @@
 #include "tile_map.h"
-
+#include "Colors.h"
 tile_map::tile_map(unsigned size)
 {
 	tile_h = 50;
@@ -15,7 +15,7 @@ tile_map::tile_map(unsigned size)
 		map.push_back(tmp);
 	}
 
-	map[size / 2][size / 2] = RED;
+	map[size / 2][size / 2] = CColors::Red.dword;
 
 	screen_to_tile_position(a1, a2, 0, 0, tile_w, tile_h);
 	screen_to_tile_position(b1, b2, D3DGraphics::SCREENWIDTH, 0, tile_w, tile_h);
