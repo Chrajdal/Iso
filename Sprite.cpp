@@ -168,4 +168,5 @@ namespace olc {
 	}
 
 	CColor* Sprite::GetData() { return pColData; }
+
 }

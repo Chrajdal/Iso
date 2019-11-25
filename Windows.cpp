@@ -123,7 +123,10 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 		}
 		//else
 		{
+			Timer t;
 			theGame.Go();
+			SetWindowTextA(hWnd, ("Iso Window FPS = " + std::to_string((int)(1e9 / t.elapsedns()))).c_str());
+
 		}
 	}
 #ifdef _WIN64

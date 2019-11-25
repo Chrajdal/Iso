@@ -81,6 +81,7 @@ public:
 	{
 		dword = (dword & 0xFFFFFF00u) | b;
 	}
+
 };
 
 namespace CColors

@@ -15,7 +15,7 @@ private:
 	EventType type;
 	unsigned char code;
 public:
-	KeyEvent( EventType type,unsigned char code )
+	KeyEvent( EventType type, unsigned char code )
 		:
 	type( type ),
 	code( code )

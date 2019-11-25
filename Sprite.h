@@ -6,6 +6,8 @@
 #include "ResourcePack.h"
 #include <objidl.h>
 #include <gdiplus.h>
+#include <d3d9.h>
+
 using namespace Gdiplus;
 #pragma comment (lib,"GdiPlus.lib")
 
@@ -29,6 +31,25 @@ namespace olc {
 		Sprite();
 		Sprite(std::string sImageFile);
 		Sprite(std::string sImageFile, olc::ResourcePack* pack);
+		Sprite(const Sprite& o)
+			: width(o.width),
+			height(o.height),
+			modeSample(o.modeSample)
+		{
+			pColData = new CColor[width*height];
+			std::copy_n(o.pColData, width * height, pColData);
+		}
+		Sprite& operator= (const Sprite& o) {
+			if (&o == this)
+				return *this;
+			width = o.width;
+			height = o.height;
+			modeSample = o.modeSample;
+			pColData = nullptr;
+			pColData = new CColor[width * height];
+			std::copy_n(o.pColData, width * height, pColData);
+			return *this;
+		}
 		Sprite(int32_t w, int32_t h);
 		~Sprite();
 
@@ -38,8 +59,8 @@ namespace olc {
 		olc::rcode SaveToPGESprFile(std::string sImageFile);
 
 	public:
-		int32_t width = 0;
-		int32_t height = 0;
+		int width = 0;
+		int height = 0;
 		enum Mode { NORMAL, PERIODIC };
 
 	public:

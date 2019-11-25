@@ -5,6 +5,7 @@
 #include "Mouse.h"
 #include "Sound.h"
 #include "Timer.h"
+#include "utils.h"
 
 class Game
 {

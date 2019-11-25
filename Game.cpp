@@ -6,13 +6,11 @@
 #include <vector>
 #include "Timer.h"
 
-static Timer timer;
-
-Vei2 vWorldSize{ 555, 555 };
+Vei2 vWorldSize{ 50, 50 };
 Vei2 vTileSize{ 40, 20 };
 Vei2 vOrigin{ 12, -10 };
 
-std::vector<std::vector<int>> pWorld (vWorldSize.y, std::vector<int>(vWorldSize.x, 0));
+std::vector<std::vector<int>> pWorld (vWorldSize.y, std::vector<int>(vWorldSize.x, 1));
 olc::Sprite* sprIsom = nullptr;
 
 enum selection
@@ -20,7 +18,7 @@ enum selection
 	grass = 1, tree = 2, dead_tree = 3, sand = 4, water = 5
 };
 
-selection user_selection = grass;
+selection user_selection;
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 :	gfx( hWnd ),
@@ -29,23 +27,33 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 	mouse( mServer )
 {
 	// Load sprites used in demonstration
-	sprIsom = new olc::Sprite("isometric_demo.png");
+	sprIsom = new olc::Sprite("isometric_demoa.png");
+	//for (int y = 0; y < vWorldSize.y; ++y) {
+	//	for (int x = 0; x < vWorldSize.x; ++x) {
+	//		double a = perlin::noise((double)y/x, (double)y*x);
+	//		double b = perlin::noise((double)y/x, (double)y*x);
+	//		double c = perlin::noise((double)y/x, (double)y*x);
+	//		double noise = perlin::noise(a * b * c, a + b + c) * 5;
+
+	//		if ((int)noise < 0)
+	//			noise *= -1;
+	//		pWorld[y][x] = ((int)noise % 5) + 1;
+	//	}
+	//}
+	user_selection = selection::grass;
 }
 
 Game::~Game()
 {
+	delete sprIsom;
 }
 
 void Game::Go()
 {
-	timer.restart();
 	UpdateModel();
 	gfx.BeginFrame();
 	ComposeFrame();
 	gfx.EndFrame();
-
-	auto elapsed = timer.elapsedns();
-	std::cout << "FPS = " << 1e9 / elapsed << std::endl;
 }
 
 void Game::UpdateModel()
@@ -117,10 +125,6 @@ void Game::ComposeFrame()
 				vWorld.y < D3DGraphics::SCREENHEIGHT + vTileSize.y)
 			switch (pWorld[y][x])
 			{
-			case 0:
-				// Invisble Tile
-				gfx.DrawPartialSprite(vWorld.x, vWorld.y, sprIsom, 1 * vTileSize.x, 0, vTileSize.x, vTileSize.y);
-				break;
 			case 1:
 				// Visible Tile
 				gfx.DrawPartialSprite(vWorld.x, vWorld.y, sprIsom, 2 * vTileSize.x, 0, vTileSize.x, vTileSize.y);
@@ -161,9 +165,14 @@ void Game::ComposeFrame()
 	//DrawRect(vCell.x * vTileSize.x, vCell.y * vTileSize.y, vTileSize.x, vTileSize.y, olc::RED);
 
 	// Draw Debug Info
-	gfx.DrawString(4, 4, "Mouse   : " + std::to_string(vMouse.x) + ", " + std::to_string(vMouse.y),        CColors::Black);
-	gfx.DrawString(4, 14, "Cell    : " + std::to_string(vCell.x) + ", " + std::to_string(vCell.y),         CColors::Black);
-	gfx.DrawString(4, 24, "Selected: " + std::to_string(vSelected.x) + ", " + std::to_string(vSelected.y), CColors::Black);
+	gfx.DrawString(4, 4, "Mouse   : " + std::to_string(vMouse.x) + ", " + std::to_string(vMouse.y),        CColors::Cyan);
+	gfx.DrawString(4, 14, "Cell    : " + std::to_string(vCell.x) + ", " + std::to_string(vCell.y),         CColors::Cyan);
+	gfx.DrawString(4, 24, "Selected: " + std::to_string(vSelected.x) + ", " + std::to_string(vSelected.y), CColors::Cyan);
+	gfx.DrawString(4, 34, "Origin: " + std::to_string(vOrigin.x) + ", " + std::to_string(vOrigin.y),       CColors::Cyan);
+
+
+	gfx.DrawSprite(50, 50, sprIsom);
+
 
 	handle_user();
 }
@@ -176,7 +185,25 @@ void Game::handle_user()
 	}
 	if (mouse.RightIsPressed())
 	{
-	
+		Vei2 vMouse = { mouse.GetMouseX(), mouse.GetMouseY() };
+
+		// Work out active cell
+		Vei2 vCell = { vMouse.x / vTileSize.x, vMouse.y / vTileSize.y };
+
+		// Work out mouse offset into cell
+		Vei2 vOffset = { vMouse.x % vTileSize.x, vMouse.y % vTileSize.y };
+
+		// Sample into cell offset colour
+		CColor col = sprIsom->GetColor(3 * vTileSize.x + vOffset.x, vOffset.y);
+
+		// Work out selected cell by transforming screen cell
+		Vei2 vSelected =
+		{
+			(vCell.y - vOrigin.y) + (vCell.x - vOrigin.x),
+			(vCell.y - vOrigin.y) - (vCell.x - vOrigin.x)
+		};
+
+		
 	}
 
 	if (kbd.KeyIsPressed(VK_UP))

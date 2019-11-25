@@ -52,11 +52,11 @@ public:
 		int px = 0, py = 0;
 		for (int b = 0; b < 1024; b += 4)
 		{
-			uint32_t sym1 = (uint32_t)data[b + 0] - 48;
-			uint32_t sym2 = (uint32_t)data[b + 1] - 48;
-			uint32_t sym3 = (uint32_t)data[b + 2] - 48;
-			uint32_t sym4 = (uint32_t)data[b + 3] - 48;
-			uint32_t r = sym1 << 18 | sym2 << 12 | sym3 << 6 | sym4;
+			unsigned sym1 = (unsigned)data[b + 0] - 48;
+			unsigned sym2 = (unsigned)data[b + 1] - 48;
+			unsigned sym3 = (unsigned)data[b + 2] - 48;
+			unsigned sym4 = (unsigned)data[b + 3] - 48;
+			unsigned r = sym1 << 18 | sym2 << 12 | sym3 << 6 | sym4;
 
 			for (int i = 0; i < 24; i++)
 			{
