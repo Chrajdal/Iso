@@ -6,28 +6,21 @@
 #include <vector>
 #include "Timer.h"
 
-Vei2 vWorldSize{ 50, 50 };
-Vei2 vTileSize{ 40, 20 };
-Vei2 vOrigin{ 12, -10 };
-
-std::vector<std::vector<int>> pWorld (vWorldSize.y, std::vector<int>(vWorldSize.x, 1));
-olc::Sprite* sprIsom = nullptr;
-
-enum selection
-{
-	grass = 1, tree = 2, dead_tree = 3, sand = 4, water = 5
-};
-
-selection user_selection;
-
-Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
-:	gfx( hWnd ),
-	audio( hWnd ),
-	kbd( kServer ),
-	mouse( mServer )
+Game::Game(HWND hWnd, KeyboardServer& kServer, const MouseServer& mServer)
+	: gfx(hWnd),
+	audio(hWnd),
+	kbd(kServer),
+	mouse(mServer),
+	vWorldSize({ 500, 500 }),
+	vTileSize({ 40, 20 }),
+	vOrigin({ (int)((D3DGraphics::SCREENWIDTH / 2) / (float)vTileSize.x), - (int)((D3DGraphics::SCREENHEIGHT / 2) / (float)vTileSize.y) })
 {
 	// Load sprites used in demonstration
 	sprIsom = new olc::Sprite("isometric_demoa.png");
+
+	pWorld = std::vector<std::vector<selection>>((int)vWorldSize.y, std::vector<selection>(vWorldSize.x, selection::grass));
+
+	// Generate world
 	//for (int y = 0; y < vWorldSize.y; ++y) {
 	//	for (int x = 0; x < vWorldSize.x; ++x) {
 	//		double a = perlin::noise((double)y/x, (double)y*x);
@@ -40,6 +33,7 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
 	//		pWorld[y][x] = ((int)noise % 5) + 1;
 	//	}
 	//}
+
 	user_selection = selection::grass;
 }
 
@@ -107,9 +101,7 @@ void Game::ComposeFrame()
 		};
 	};
 
-	// Draw World - has binary transparancy so enable masking
-	//SetPixelMode(olc::Pixel::MASK);
-	gfx.m_mode = gfx.ALPHA;
+	gfx.m_mode = D3DGraphics::PixelMode::NORMAL;
 
 	// (0,0) is at top, defined by vOrigin, so draw from top to bottom
 	// to ensure tiles closest to camera are drawn last
@@ -117,49 +109,53 @@ void Game::ComposeFrame()
 	{
 		for (int x = 0; x < vWorldSize.x; x++)
 		{
+			gfx.m_mode = D3DGraphics::PixelMode::ALPHA;
+
 			// Convert cell coordinate to world space
 			Vei2 vWorld = ToScreen(x, y);
-			if(	vWorld.x > -vTileSize.x &&
-				vWorld.x < D3DGraphics::SCREENWIDTH + vTileSize.x &&
-				vWorld.y > -vTileSize.y &&
-				vWorld.y < D3DGraphics::SCREENHEIGHT + vTileSize.y)
-			switch (pWorld[y][x])
-			{
-			case 1:
-				// Visible Tile
-				gfx.DrawPartialSprite(vWorld.x, vWorld.y, sprIsom, 2 * vTileSize.x, 0, vTileSize.x, vTileSize.y);
-				break;
-			case 2:
-				// Tree
-				gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 0 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
-				break;
-			case 3:
-				// Spooky Tree
-				gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 1 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
-				break;
-			case 4:
-				// Beach
-				gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 2 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
-				break;
-			case 5:
-				// Water
-				gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 3 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
-				break;
-			}
+			if (vWorld.x >= -1*vTileSize.x &&
+				vWorld.x <= D3DGraphics::SCREENWIDTH + 1* vTileSize.x &&
+				vWorld.y >= -1*vTileSize.y &&
+				vWorld.y <= D3DGraphics::SCREENHEIGHT + 1*vTileSize.y)
+
+				switch (pWorld[y][x])
+				{
+				case selection::grass:
+					// Visible Tile
+					gfx.DrawPartialSprite(vWorld.x, vWorld.y, sprIsom, 2 * vTileSize.x, 0, vTileSize.x, vTileSize.y);
+					break;
+				case selection::tree:
+					// Tree
+					gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 0 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
+					break;
+				case selection::dead_tree:
+					// Spooky Tree
+					gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 1 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
+					break;
+				case selection::sand:
+					// Beach
+					gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 2 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
+					break;
+				case selection::water:
+					// Water
+					gfx.DrawPartialSprite(vWorld.x, vWorld.y - vTileSize.y, sprIsom, 3 * vTileSize.x, 1 * vTileSize.y, vTileSize.x, vTileSize.y * 2);
+					break;
+				}
 		}
 	}
 
 	// Draw Selected Cell - Has varying alpha components
-	gfx.m_mode = gfx.ALPHA;
+	gfx.m_mode = D3DGraphics::PixelMode::ALPHA;
 
 	// Convert selected cell coordinate to world space
 	Vei2 vSelectedWorld = ToScreen(vSelected.x, vSelected.y);
 
 	// Draw "highlight" tile
 	gfx.DrawPartialSprite(vSelectedWorld.x, vSelectedWorld.y, sprIsom, 0 * vTileSize.x, 0, vTileSize.x, vTileSize.y);
+	
 
 	// Go back to normal drawing with no expected transparency
-	gfx.m_mode = gfx.NORMAL;
+	gfx.m_mode = D3DGraphics::PixelMode::NORMAL;
 
 	// Draw Hovered Cell Boundary
 	//DrawRect(vCell.x * vTileSize.x, vCell.y * vTileSize.y, vTileSize.x, vTileSize.y, olc::RED);
@@ -169,11 +165,7 @@ void Game::ComposeFrame()
 	gfx.DrawString(4, 14, "Cell    : " + std::to_string(vCell.x) + ", " + std::to_string(vCell.y),         CColors::Cyan);
 	gfx.DrawString(4, 24, "Selected: " + std::to_string(vSelected.x) + ", " + std::to_string(vSelected.y), CColors::Cyan);
 	gfx.DrawString(4, 34, "Origin: " + std::to_string(vOrigin.x) + ", " + std::to_string(vOrigin.y),       CColors::Cyan);
-
-
-	gfx.DrawSprite(50, 50, sprIsom);
-
-
+	
 	handle_user();
 }
 
@@ -181,7 +173,7 @@ void Game::handle_user()
 {
 	if (mouse.LeftIsPressed())
 	{
-	
+
 	}
 	if (mouse.RightIsPressed())
 	{
@@ -203,7 +195,7 @@ void Game::handle_user()
 			(vCell.y - vOrigin.y) - (vCell.x - vOrigin.x)
 		};
 
-		
+
 	}
 
 	if (kbd.KeyIsPressed(VK_UP))
@@ -226,16 +218,16 @@ void Game::handle_user()
 	if (kbd.KeyIsPressed(0x31)) {
 		user_selection = selection::grass;
 	}
-	if (kbd.KeyIsPressed(0x32)){
+	if (kbd.KeyIsPressed(0x32)) {
 		user_selection = selection::tree;
 	}
-	if (kbd.KeyIsPressed(0x33)){
+	if (kbd.KeyIsPressed(0x33)) {
 		user_selection = selection::dead_tree;
 	}
-	if (kbd.KeyIsPressed(0x34)){
+	if (kbd.KeyIsPressed(0x34)) {
 		user_selection = selection::sand;
 	}
-	if (kbd.KeyIsPressed(0x35)){
+	if (kbd.KeyIsPressed(0x35)) {
 		user_selection = selection::water;
 	}
 }

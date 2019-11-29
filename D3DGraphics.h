@@ -23,8 +23,8 @@ public:
 	void DrawDisc(int centerX, int centerY, int radius, D3DCOLOR CColor);
 	void DrawRect(int x, int y, int w, int h, D3DCOLOR c);
 	void DrawRectFill(int x, int y, int w, int h, D3DCOLOR c);
-	void DrawSprite(int32_t x, int32_t y, Sprite* sprite, uint32_t scale = 1);
-	void DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1);
+	void DrawSprite(int x, int y, Sprite* sprite, unsigned scale = 1);
+	void DrawPartialSprite(int x, int y, Sprite* sprite, int ox, int oy, int w, int h, unsigned scale = 1);
 
 	void ConstructFontSheet()
 	{
@@ -116,10 +116,10 @@ private:
 	D3DCOLOR *			pSysBuffer;
 	Sprite* fontSprite = nullptr;
 public:
-	enum nPixelMode {
+	enum class PixelMode {
 		NORMAL,
 		ALPHA
 	};
 
-	nPixelMode m_mode;
+	PixelMode m_mode;
 };

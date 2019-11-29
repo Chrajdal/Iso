@@ -7,7 +7,7 @@ using std::max;
 #include <Windows.h>
 
 namespace olc {
-	enum rcode
+	enum class rcode
 	{
 		FAIL = 0,
 		OK = 1,

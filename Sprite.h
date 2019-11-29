@@ -61,7 +61,7 @@ namespace olc {
 	public:
 		int width = 0;
 		int height = 0;
-		enum Mode { NORMAL, PERIODIC };
+		enum class Mode { NORMAL, PERIODIC };
 
 	public:
 		//void SetSampleMode(olc::Sprite::Mode mode = olc::Sprite::Mode::NORMAL);

@@ -63,7 +63,7 @@ D3DGraphics::~D3DGraphics()
 void D3DGraphics::BeginFrame()
 {
 	//memset( pSysBuffer,FILLVALUE,sizeof(D3DCOLOR )* SCREENWIDTH * SCREENHEIGHT );
-	std::fill_n(pSysBuffer, SCREENWIDTH * SCREENHEIGHT, CColors::Black.dword);
+	std::fill_n(pSysBuffer, SCREENWIDTH * SCREENHEIGHT, CColors::MakeRGB(55,55,55).dword);
 }
 
 void D3DGraphics::EndFrame()
@@ -93,7 +93,7 @@ void D3DGraphics::PutColor( int x,int y,D3DCOLOR c )
 		&& (x < SCREENWIDTH)
 		&& (y < SCREENHEIGHT)) {
 		CColor theColor = c;
-		if (m_mode == nPixelMode::ALPHA)
+		if (m_mode == PixelMode::ALPHA)
 		{
 			CColor d = GetColor(x,y);
 			CColor col = c;
@@ -234,33 +234,32 @@ void D3DGraphics::DrawSprite(int x, int y, Sprite* sprite, unsigned scale)
 	}
 	else
 	{
+		if(m_mode == PixelMode::NORMAL)
 		for (int i = 0; i < sprite->height; ++i)
 			std::copy_n((D3DCOLOR*)(sprite->GetData()) + i * sprite->width, sprite->width, pSysBuffer + (y + i) * SCREENWIDTH + x);
+		if (m_mode == PixelMode::ALPHA)
+			for (int i = 0; i < sprite->width; i++)
+				for (int j = 0; j < sprite->height; j++)
+					PutColor(x + i, y + j, sprite->GetColor(i, j).dword);
 	}
 }
 
-void D3DGraphics::DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale)
+void D3DGraphics::DrawPartialSprite(int x, int y, Sprite* sprite, int ox, int oy, int w, int h, unsigned scale)
 {
 	if (sprite == nullptr || scale == 0)
 		return;
 	if (scale > 1)
 	{
-		for (int32_t i = 0; i < w; i++)
-			for (int32_t j = 0; j < h; j++)
-				for (uint32_t is = 0; is < scale; is++)
-					for (uint32_t js = 0; js < scale; js++)
+		for (int i = 0; i < w; i++)
+			for (int j = 0; j < h; j++)
+				for (unsigned is = 0; is < scale; is++)
+					for (unsigned js = 0; js < scale; js++)
 						PutColor(x + (i * scale) + is, y + (j * scale) + js, sprite->GetColor(i + ox, j + oy).dword);
 	}
 	else
 	{
-		//for (int32_t j = 0; j < h; j++)
-		//{
-		//	CColor d = GetColor(x, y);
-		//	std::copy_n
-		//	pSysBuffer[x + ox + SCREENWIDTH * j] = theColor.dword;
-		//}
-		for (int32_t i = 0; i < w; i++)
-			for (int32_t j = 0; j < h; j++)
+		for (int i = 0; i < w; i++)
+			for (int j = 0; j < h; j++)
 				PutColor(x + i, y + j, sprite->GetColor(i + ox, j + oy).dword);
 	}
 }

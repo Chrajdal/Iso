@@ -54,10 +54,10 @@ namespace olc {
 			if (ifs.is_open())
 			{
 				ReadData(ifs);
-				return olc::OK;
+				return olc::rcode::OK;
 			}
 			else
-				return olc::FAIL;
+				return olc::rcode::FAIL;
 		}
 		else
 		{
@@ -66,12 +66,12 @@ namespace olc {
 			ReadData(is);
 		}
 
-		return olc::FAIL;
+		return olc::rcode::FAIL;
 	}
 
 	olc::rcode Sprite::SaveToPGESprFile(std::string sImageFile)
 	{
-		if (pColData == nullptr) return olc::FAIL;
+		if (pColData == nullptr) return olc::rcode::FAIL;
 
 		std::ofstream ofs;
 		ofs.open(sImageFile, std::ifstream::binary);
@@ -81,10 +81,10 @@ namespace olc {
 			ofs.write((char*)& height, sizeof(int32_t));
 			ofs.write((char*)pColData, width * height * sizeof(uint32_t));
 			ofs.close();
-			return olc::OK;
+			return olc::rcode::OK;
 		}
 
-		return olc::FAIL;
+		return olc::rcode::FAIL;
 	}
 
 	olc::rcode Sprite::LoadFromFile(std::string sImageFile, olc::ResourcePack* pack)
@@ -92,7 +92,7 @@ namespace olc {
 		std::wstring wsImageFile = std::wstring(sImageFile.begin(), sImageFile.end());
 		Gdiplus::Bitmap* bmp = Gdiplus::Bitmap::FromFile(wsImageFile.c_str());
 		if (bmp == nullptr)
-			return olc::NO_FILE;
+			return olc::rcode::NO_FILE;
 
 		width = bmp->GetWidth();
 		height = bmp->GetHeight();
@@ -109,7 +109,7 @@ namespace olc {
 				SetColor(x, y, col);
 			}
 		delete bmp;
-		return olc::OK;
+		return olc::rcode::OK;
 	}
 
 	CColor Sprite::GetColor(int32_t x, int32_t y)

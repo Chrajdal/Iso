@@ -5,7 +5,7 @@
 class KeyEvent
 {
 public:
-	enum EventType
+	enum class EventType
 	{
 		Press,
 		Release,
@@ -22,15 +22,15 @@ public:
 	{}
 	bool IsPress() const
 	{
-		return type == Press;
+		return type == EventType::Press;
 	}
 	bool IsRelease() const
 	{
-		return type == Release;
+		return type == EventType::Release;
 	}
 	bool IsValid() const
 	{
-		return type != Invalid;
+		return type != EventType::Invalid;
 	}
 	unsigned char GetCode() const
 	{
@@ -69,7 +69,7 @@ public:
 private:
 	static const int nKeys = 256;
 	static const int bufferSize = 4;
-	bool keystates[ nKeys ];
+	bool keystates[nKeys] = { false };
 	std::queue<KeyEvent> keybuffer;
 	std::queue<unsigned char> charbuffer;
 };

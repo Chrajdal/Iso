@@ -14,7 +14,7 @@ namespace olc {
 	olc::rcode ResourcePack::AddToPack(std::string sFile)
 	{
 		std::ifstream ifs(sFile, std::ifstream::binary);
-		if (!ifs.is_open()) return olc::FAIL;
+		if (!ifs.is_open()) return olc::rcode::FAIL;
 
 		// Get File Size
 		std::streampos p = 0;
@@ -35,13 +35,13 @@ namespace olc {
 
 		// Add To Map
 		mapFiles[sFile] = e;
-		return olc::OK;
+		return olc::rcode::OK;
 	}
 
 	olc::rcode ResourcePack::SavePack(std::string sFile)
 	{
 		std::ofstream ofs(sFile, std::ofstream::binary);
-		if (!ofs.is_open()) return olc::FAIL;
+		if (!ofs.is_open()) return olc::rcode::FAIL;
 
 		// 1) Write Map
 		size_t nMapSize = mapFiles.size();
@@ -79,13 +79,13 @@ namespace olc {
 		}
 		ofs.close();
 
-		return olc::OK;
+		return olc::rcode::OK;
 	}
 
 	olc::rcode ResourcePack::LoadPack(std::string sFile)
 	{
 		std::ifstream ifs(sFile, std::ifstream::binary);
-		if (!ifs.is_open()) return olc::FAIL;
+		if (!ifs.is_open()) return olc::rcode::FAIL;
 
 		// 1) Read Map
 		uint32_t nMapEntries;
@@ -117,7 +117,7 @@ namespace olc {
 		}
 
 		ifs.close();
-		return olc::OK;
+		return olc::rcode::OK;
 	}
 
 	olc::ResourcePack::sEntry ResourcePack::GetStreamBuffer(std::string sFile)
@@ -134,6 +134,6 @@ namespace olc {
 		}
 
 		mapFiles.clear();
-		return olc::OK;
+		return olc::rcode::OK;
 	}
 }

@@ -23,4 +23,19 @@ private:
 	MouseClient mouse;
 	DSound audio;
 	void UpdateModel();
+	
+public:
+	enum class selection
+	{
+		grass = 1, tree = 2, dead_tree = 3, sand = 4, water = 5
+	};
+private:
+	Vei2 vWorldSize;
+	Vei2 vTileSize;
+	Vei2 vOrigin;
+	std::vector<std::vector<selection>> pWorld;
+	olc::Sprite* sprIsom = nullptr;
+	selection user_selection;
+
+
 };
